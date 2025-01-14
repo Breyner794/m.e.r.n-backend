@@ -57,6 +57,7 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
+    console.log('Intentando conectar a:', process.env.MONGO);
     await initializeRoles();
     console.log(`✅ Conectado a MongoDB exitosamente: ${conn.connection.host}`);
   } catch (error) {

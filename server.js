@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db.js');
 require('dotenv').config();
+const mongoose = require('mongoose');
 const aeropuertoRouter = require('./routes/aeropuertoRouter.js');
 const avionesRouter = require('./routes/avionesRouter.js');
 const empleadosRouter = require('./routes/empleadosRouter.js');
@@ -28,7 +29,7 @@ app.use(express.json());
 /* app.use(express.urlencoded({extended:true})) */
 
 // Conexión a MongoDB
-connectDB();
+//connectDB();
 
 // Rutas
 /* app.use('/api/auth', authRoutes, testRoutes);
@@ -46,12 +47,16 @@ app.use('/api/equipaje', equipajeRouter);
 app.use('/api/tripulacion', tripulacionRouter);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('Intentando conectar a:', process.env.MONGO);
-    mongoose.connect(process.env.MONGO)
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch(err => console.error('Error de conexión:', err));
-});
+connectDB()
+  .then(() => {
+    // Una vez conectado, iniciamos el servidor
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Servidor corriendo en puerto ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Error al iniciar la aplicación:', err);
+  });
 
 
   
