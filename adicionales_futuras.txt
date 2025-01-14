@@ -1,0 +1,68 @@
+const Pasajero = require('../models/pasajeroModel');
+
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Buscar al pasajero por email
+        const pasajero = await Pasajero.findOne({ email });
+
+        if (!pasajero) {
+            return res.status(404).json({
+                success: false,
+                message: 'Pasajero no encontrado'
+            });
+        }
+
+        // Verificar el estado del pasajero
+        if (pasajero.estado !== 'activo') {
+            return res.status(403).json({
+                success: false,
+                message: 'El pasajero no está activo'
+            });
+        }
+
+        // Verificar la contraseña (asumiendo que tienes un método para esto)
+        const isMatch = await pasajero.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Contraseña incorrecta'
+            });
+        }
+
+        // Generar un token de autenticación (asumiendo que tienes un método para esto)
+        const token = pasajero.generateAuthToken();
+
+        res.status(200).json({
+            success: true,
+            token,
+            message: 'Inicio de sesión exitoso'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error en el servidor',
+            error: error.message
+        });
+    }
+};
+
+verificacion del login.
+
+
+{
+    "codigo_pasajero": 12345,
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "fecha_nacimiento": "1980-01-01T00:00:00.000Z",
+    "nacionalidad": "Mexicana",
+    "pasaporte": "A12345678",
+    "fecha_expiracion": "2030-01-01T00:00:00.000Z",
+    "direccion": "Calle Falsa 123",
+    "telefono": "555-1234",
+    "email": "juan.perez@example.com",
+    "genero": "masculino",
+    "tipo": "adulto",
+    "estado": "activo"
+}
