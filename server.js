@@ -47,7 +47,10 @@ app.use('/api/tripulacion', tripulacionRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log('Intentando conectar a:', process.env.MONGO);
+    mongoose.connect(process.env.MONGO)
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error de conexión:', err));
 });
 
 
