@@ -8,7 +8,6 @@ const login = async (req, res) => {
     console.log('Intento de login con:', email);
 
     const user = await User.findOne({ email }).populate('role');
-    console.log('Query resultado:', user);
     
     if (!user) {
       console.log('Usuario no encontrado');
