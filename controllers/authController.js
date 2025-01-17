@@ -4,17 +4,22 @@ const Role = require('../models/roles.js');
 
 const login = async (req, res) => {
   try {
+    const { email, password } = req.body;
+    console.log('Intento de login con:', email);
 
     const user = await User.findOne({ email }).populate('role');
-
+    console.log('Query resultado:', user);
+    
     if (!user) {
       console.log('Usuario no encontrado');
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
-
+    
     const isMatch = await user.comparePassword(password);
+    console.log('¿Contraseña coincide?:', isMatch);
 
     if (!isMatch) {
+      console.log('Contraseña no coincide');
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
